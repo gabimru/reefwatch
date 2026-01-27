@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wepjwifowie</title>
+    <style> /* the styling*/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ffeff9 0%, #ffe0fa 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgb(238, 65, 163);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #eae5eb;
+            padding: 24px;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color:white;
+        }
+
+        .header-title h1 {
+            font-size: 30px;
+            font-weight: bold;
+            color: #271127;
+        }
+
+        .header-subtitle {
+            color: white;
+            margin-top: 8px;
+        }
+
+        .camera-icon {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #371f35;
+        }
+
+        .stream-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stream-button {
+            width: 100%;
+            text-align: left;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stream-button:hover {
+            border-color: #fca5eb;
+        }
+
+        .stream-button.active {
+            border-color: #fca5eb;
+            background: #f1bbe6;
+        }
+
+        .stream-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stream-name {
+            font-weight: 500;
+            color: #271124;
+        }
+
+        .stream-category {
+            font-size: 14px;
+            color: #806b7e;
+            margin-top: 4px;
+        }
+
+        .snapshots-container {
+            margin-top: 24px;
+        }
+
+        .snapshots-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .snapshot-card {
+            border: 1px solid #ebe5ea;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .snapshot-image {
+            width: 100%;
+            height: 128px;
+            object-fit: cover;
+        }
+
+        .snapshot-info {
+            padding: 12px;
+            background: #fbf9fb;
+        }
+
+        .snapshot-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #271120;
+        }
+
+        .snapshot-time {
+            font-size: 12px;
+            color: #806b7b;
+            margin-top: 4px;
+        }
+
+        .snapshot-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .btn { /*the button class*/
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        } 
+
+        .btn-download {
+            flex: 1;
+            background: #e546b8;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #e546b8;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-delete:hover {
+            background: #fecaca;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: black;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-details {
+            padding: 24px;
+        }
+
+        .video-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .video-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #271126;
+        }
+
+        .video-category {
+            color: #806b78;
+            margin-top: 4px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .capture-btn { /*another button class*/
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            background: #e546b8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(158, 84, 130, 0.3);
+        }
+
+        .capture-btn:hover {
+            background: #ca389e;
+            box-shadow: 0 6px 8px rgba(229, 70, 197, 0.4);
+        }
+
+        .capture-btn:disabled {
+            background: #dbd1db;
+            color: #806b76;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .note {
+            margin-top: 16px;
+            padding: 16px;
+            background: #ffefef;
+            border: 1px solid #febff6;
+            border-radius: 8px;
+        }
+
+        .note p {
+            font-size: 14px;
+            color: #af1e58;
+        }
+
+        .note strong {
+            font-weight: 600;
+        }
+
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 16/9;
+            background: #f6f3f6;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .placeholder-content {
+            padding: 32px;
+        }
+
+        .placeholder h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #51374b;
+            margin-top: 16px;
+        }
+
+        .placeholder p {
+            color: #806b79;
+            margin-top: 8px;
+        }
+
+        .instructions {
+            margin-top: 24px;
+        }
+
+        .instructions ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #51374b;
+        }
+
+        .instructions .step-number {
+            font-weight: 600;
+            color: #e546b8;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px;
+            color: #806b7e;
+            font-size: 14px;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-title">
+                <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+</svg>
+
+                <h1 style="color:white;">MarineWatch</h1>
+            </div>
+            <p class="header-subtitle">worfnjlkmsdlkpwirjfoeirjg</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- sidebar -->
+            <div>
+                <div class="card">
+                    <h2 class="card-title">Live Streams</h2>
+                    <div class="stream-list" id="streamList"></div>
+                </div>
+
+                <div class="card snapshots-container">
+                    <h2 class="card-title">My Snapshots (<span id="snapshotCount">0</span>)</h2>
+                    <div class="snapshots-list" id="snapshotsList">
+                        <div class="empty-state">No snapshots yet. Capture your first moment!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- video container -->
+            <div>
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div id="videoArea"></div>
+                </div>
+
+                <!-- scroll down box -->
+                <div class="card instructions">
+                    <h3 class="card-title">What to Report</h3>
+                    <ol>
+                        <li>
+                            <span class="step-number">1.</span>
+                            <span>Injured animals</span>
+                        </li>
+                        <li>
+                            <span class="step-number">2.</span>
+                            <span>Bleached, white corals</span>
+                        </li>
+                        <li>
+                            <span class="step-number">3.</span>
+                            <span>Marine life eating corals</span>
+                        </li>
+                        <li>
+                            <span class="step-number">4.</span>
+                            <span>Idk tbh</span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // youtube video links
+        const streams = [
+            {
+                id: 1,
+                name: "Coral City Camera",
+                youtubeId: "7i8ARjIeM2k",
+                category: "Marine"
+            },
+            {
+                id: 2,
+                name: "Lower Keys View",
+                youtubeId: "qi0mY6zVQnY",
+                category: "Marine"
+            },
+        ];
+
+        let selectedStream = null;
+        let snapshots = [];
+
+        function init() {
+            renderStreamList();
+            renderVideoArea();
+        }
+
+        function renderStreamList() {
+            const streamList = document.getElementById('streamList');
+            streamList.innerHTML = streams.map(stream => `
+                <button class="stream-button ${selectedStream?.id === stream.id ? 'active' : ''}" 
+                        onclick="selectStream(${stream.id})">
+                    <div class="stream-info">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <div class="stream-name">${stream.name}</div>
+                            <div class="stream-category">${stream.category}</div>
+                        </div>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        // choose your character
+        function selectStream(id) {
+            selectedStream = streams.find(s => s.id === id);
+            renderStreamList();
+            renderVideoArea();
+        }
+
+        function renderVideoArea() {
+            const videoArea = document.getElementById('videoArea');
+            
+            if (selectedStream) {
+                videoArea.innerHTML = `
+                    <div class="video-container">
+                        <iframe
+                            src="https://www.youtube.com/embed/${selectedStream.youtubeId}?autoplay=1&mute=1"
+                            title="${selectedStream.name}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="video-details">
+                        <div class="video-header">
+                            <div>
+                                <h2 class="video-title">${selectedStream.name}</h2>
+                                <p class="video-category">Category: ${selectedStream.category}</p>
+                            </div>
+                            <div class="live-badge">
+                                <span class="live-dot"></span>
+                                LIVE
+                            </div>
+                        </div>
+                        <button class="capture-btn" onclick="captureSnapshot()">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Capture Snapshot
+                        </button>
+                        <div class="note">
+                            <p><strong>Note:</strong> YouTube has security restrictions which restrict real-time snapshots. Need to use direct stream URLs or build a backend server.</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                videoArea.innerHTML = `
+                    <div class="placeholder">
+                        <div class="placeholder-content">
+                            <svg width="64" height="64" fill="none" stroke="#9ca3af" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <h3>Select a Live Stream</h3>
+                            <p>Choose a stream from the sidebar to get started</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // snapshot mechanic
+        function captureSnapshot() {
+            if (!selectedStream) return;
+
+            const thumbnailUrl = `https://img.youtube.com/vi/${selectedStream.youtubeId}/maxresdefault.jpg`;
+            
+            const newSnapshot = {
+                id: Date.now(),
+                streamName: selectedStream.name,
+                imageUrl: thumbnailUrl,
+                timestamp: new Date().toLocaleString()
+            };
+
+            snapshots.unshift(newSnapshot);
+            renderSnapshots();
+
+            // forces timeout
+            const btn = document.querySelector('.capture-btn');
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Capturing...
+            `;
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Capture Snapshot
+                `;
+            }, 500);
+        }
+
+        // my snapshots details
+        function renderSnapshots() {
+            const snapshotsList = document.getElementById('snapshotsList');
+            const snapshotCount = document.getElementById('snapshotCount');
+            
+            snapshotCount.textContent = snapshots.length;
+
+            if (snapshots.length === 0) {
+                snapshotsList.innerHTML = '<div class="empty-state">No snapshots yet. Capture your first moment!</div>';
+                return;
+            }
+
+            snapshotsList.innerHTML = snapshots.map(snapshot => `
+                <div class="snapshot-card">
+                    <img src="${snapshot.imageUrl}" alt="${snapshot.streamName}" class="snapshot-image">
+                    <div class="snapshot-info">
+                        <div class="snapshot-name">${snapshot.streamName}</div>
+                        <div class="snapshot-time">${snapshot.timestamp}</div>
+                        <div class="snapshot-actions">
+                            <button class="btn btn-download" onclick="downloadSnapshot(${snapshot.id})">
+                                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Download
+                            </button>
+                            <button class="btn btn-delete" onclick="deleteSnapshot(${snapshot.id})">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // download snapshot btn
+        function downloadSnapshot(id) {
+            const snapshot = snapshots.find(s => s.id === id);
+            if (snapshot) {
+                const link = document.createElement('a');
+                link.href = snapshot.imageUrl;
+                link.download = `${snapshot.streamName}-${snapshot.id}.jpg`;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        // delete snapshot mechanic
+        function deleteSnapshot(id) {
+            snapshots = snapshots.filter(s => s.id !== id);
+            renderSnapshots();
+        }
+
+        init();
+    </script>
+</body>
+</html>
