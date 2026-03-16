@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #ffe8f4;
+  }
+
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+  
+  .main-header {
+    background: rgb(238, 65, 163);
+    color: white;
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #ffbde8;
+  }
+  
+  .main-header h1 {
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  .tabs {
+    display: flex;
+    background: #ef9cc6;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  
+  .tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #ef9cc6;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .tab-btn:hover {
+    background: #ff6db6;
+  }
+  
+  .tab-btn:active {
+    background: #e555a3;
+  }
+  
+  .tab-content {
+    position: relative;
+    height: calc(100vh - 90px); /* fits screen minus header and nav */
+    background: rgb(255, 218, 241);
+  }
+  
+  .tab-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .main-header {
+      padding: 10px 15px;
+      font-size: 18px;
+    }
+    
+    .tabs {
+      justify-content: center;
+    }
+    
+    .tab-btn {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    
+    .tab-content {
+      height: calc(100vh - 110px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .main-header {
+      font-size: 16px;
+      padding: 8px 12px;
+    }
+    
+    .tab-btn {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+  }
+  

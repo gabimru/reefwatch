@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Contact Us</title>
+</head>
+<body>
+    <div class="fish-pattern"></div>
+    
+    <div class="content-wrapper">
+        <!-- team section -->
+        <section class="team-section">
+            <h1 class="section-title">Meet Our Team</h1>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="teli.png" alt="Eli Martinez">
+                    </div>
+                    <h3 class="team-name"><mark>Eli Martinez</mark></h3>
+                    <a href="mailto:elikayleenm@gmail.com" class="team-email"><mark>elikayleenm@gmail.com</mark></a>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="tcatha.png" alt="Catharina Bomfim">
+                    </div>
+                    <h3 class="team-name"><mark>Catharina Bomfim</mark></h3>
+                    <a href="mailto:cathaazebomfim@gmail.com" class="team-email"><mark>cathaazebomfim@gmail.com</mark></a>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="tmica.png" alt="Micaela Mejia">
+                    </div>
+                    <h3 class="team-name"><mark>Micaela Mejia</mark></h3>
+                    <a href="mailto:micaelamejiart@gmail.com" class="team-email"><mark>micaelamejiart@gmail.com</mark></a>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="tgigi.png" alt="Giselle Iskandarani">
+                    </div>
+                    <h3 class="team-name"><mark>Giselle Iskandarani</mark></h3>
+                    <a href="mailto:giselleisk@gmail.com" class="team-email"><mark>giselleisk@gmail.com</mark></a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- updated bug report -->
+        <section class="bug-report-section">
+            <h2 class="section-title">Report a Bug</h2>
+            <form id="bugReportForm" class="bug-form">
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="bugDescription" 
+                        class="form-input" 
+                        placeholder="Describe the issue..."
+                        required
+                    >
+                </div>
+                
+                <div class="form-row">
+                    <select id="bugSeverity" class="form-select">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                    
+                    <button type="submit" class="submit-btn">Report Bug</button>
+                </div>
+                
+                <div id="statusMessage" class="status-message" style="display: none;">
+                    ✔ Report sent successfully!
+                </div>
+            </form>
+        </section>
+    </div>
+    
+    <script>
+        // Bug report submission
+        document.getElementById('bugReportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('bugDescription').value;
+            const severity = document.getElementById('bugSeverity').value;
+            
+            const formData = new FormData();
+            formData.append("description", description);
+            formData.append("severity", severity);
+            formData.append("page", window.location.href);
+            formData.append("browser", navigator.userAgent);
+            
+            fetch("https://script.google.com/macros/s/AKfycbzLhPDyHEfr6047HAmy-LN-ih2NTL-dSSd0rnvtrTasQ_sYpEe-itgyewR5EPLBpCQ0MQ/exec", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                console.log("Server says:", text);
+                
+                // Clear input
+                document.getElementById('bugDescription').value = "";
+                
+                // Show success message
+                const statusMsg = document.getElementById('statusMessage');
+                statusMsg.style.display = 'block';
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    statusMsg.style.display = 'none';
+                }, 3000);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>

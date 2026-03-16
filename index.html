@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/addons/p5.sound.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>🪸 ReefWatch Miami</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <h1>🪸 ReefWatch Miami</h1>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn" onclick="openTab('home')">Home</button>
+    <button class="tab-btn" onclick="openTab('identify')">Identify</button>
+    <button class="tab-btn" onclick="openTab('cam')">📷</button>
+    <button class="tab-btn" onclick="openTab('draw')">Color a fish!</button>
+    <button class="tab-btn" onclick="openTab('memory_game')">Memory Game!</button>
+    <button class="tab-btn" onclick="openTab('contact')"> Contact</button>
+  </nav>
+
+  <main class="tab-content">
+    <iframe id="home" src="tabs/home/index.html" class="tab-frame"></iframe>
+    <iframe id="cam" src="tabs/cam/index.html" class="tab-frame" style="display: none;"></iframe>
+    <iframe id="draw" src="tabs/draw/index.html" class="tab-frame" style="display: none;"></iframe>
+    <iframe id="memory_game" src="tabs/memory_game/index.html" class="tab-frame" style="display: none;"></iframe>
+    <iframe id="identify" src="tabs/identify/index.html" class="tab-frame" style="display: none;"></iframe>
+    <iframe id="contact" src="tabs/contact/index.html" class="tab-frame" style="display: none;"></iframe>
+
+  </main>
+
+  <script>
+    function openTab(tabId) {
+      const frames = document.querySelectorAll(".tab-frame");
+      frames.forEach(frame => frame.style.display = "none");
+      document.getElementById(tabId).style.display = "block";
+    }
+  </script>
+</body>
+</html>

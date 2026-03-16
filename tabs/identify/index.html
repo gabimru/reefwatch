@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReefWatch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ffeff9 0%, #ffe0fa 100%);
+            min-height: 100vh;
+        }
+
+        .camera-icon {
+            width: 15px;
+            height: 20px;
+            color: rgb(0, 0, 0);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        
+        .card2 {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-top:24px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #371f35;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .card-title2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #371f35;
+        }
+
+        .identification-list {
+            display: flex;
+            padding: 24px;
+            margin-top: 24px;
+            margin-bottom: 24px;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .category-button {
+            width: 100%;
+            text-align: left;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-button:hover {
+            border-color: #fca5eb;
+        }
+
+        .category-button.active {
+            border-color: #fca5eb;
+            background: #f1bbe6;
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: #271124;
+        }
+
+        .category-count {
+            font-size: 14px;
+            color: #806b7e;
+            margin-top: 4px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: black;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-details {
+            padding: 24px;
+        }
+
+        .video-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .video-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #271126;
+        }
+
+        .video-category {
+            color: #806b78;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #371f35;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #e546b8;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #fbf9fb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-option:hover {
+            background: #f6f3f6;
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #fbf9fb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .radio-option:hover {
+            background: #f6f3f6;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            background: #e546b8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(158, 84, 130, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: #ca389e;
+            box-shadow: 0 6px 8px rgba(229, 70, 197, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #dbd1db;
+            color: #806b76;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .skip-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            background: white;
+            color: #806b78;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        .skip-btn:hover {
+            border-color: #fca5eb;
+            background: #fbf9fb;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-info {
+            background: #ffefef;
+            border: 1px solid #febff6;
+            color: #af1e58;
+        }
+
+        .stats-container {
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 2px solid #f1bbe6;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ebe5ea;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #806b7e;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: #271124;
+            font-weight: 600;
+        }
+
+        .instructions {
+            margin-top: 24px;
+        }
+
+        .instructions ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #51374b;
+        }
+
+        .instructions .step-number {
+            font-weight: 600;
+            color: #e546b8;
+        }
+
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 16/9;
+            background: #f6f3f6;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .placeholder-content {
+            padding: 32px;
+        }
+
+        .placeholder h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #51374b;
+            margin-top: 16px;
+        }
+
+        .placeholder p {
+            color: #806b79;
+            margin-top: 8px;
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ebe5ea;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #e546b8;
+            transition: width 0.3s;
+        }
+
+        .ai-panel {
+            margin-bottom: 20px;
+            border: 2px solid #f1bbe6;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fff7fc;
+        }
+        
+        .ai-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #371f35;
+            margin-bottom: 8px;
+        }
+
+        .ai-status {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6f4d68;
+            margin-bottom: 10px;
+        }
+
+        .ai-predictions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .prediction-chip {
+            background: #f1bbe6;
+            color: #271124;
+            border-radius: 9999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .ai-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-confirm {
+            background: #10b981;
+            color: white;
+            border-radius: 6px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn-confirm:disabled {
+            background: #c6fae9;
+            cursor: not-allowed;
+        }
+        
+        .btn-deny {
+            background: #ef4444;
+            color: white;
+            border-radius: 6px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn-deny:disabled {
+            background: #eab4b4;
+            cursor: not-allowed;
+        }
+
+        .feedback-note {
+            font-size: 13px;
+            color: #51374b;
+            margin-bottom: 8px;
+        }
+
+        .catalog-container {
+            padding: 24px;
+        }
+
+        .catalog-iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #f1bbe6;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Sidebar -->
+            <div>
+                <div class="card">
+                    <h2 class="card-title">Categories</h2>
+                    <div class="category-list" id="categoryList"></div>
+                </div>
+
+                <div class="card stats-container">
+                    <h2 class="card-title">Your Progress</h2>
+                    <div class="stat-card">
+                        <div class="stat-row">
+                            <span class="stat-label">Clips Labeled</span>
+                            <span class="stat-value" id="totalLabeled">0</span>
+                        </div>
+
+                        <div class="stat-row">
+                            <span class="stat-label">Fish Identified</span>
+                            <span class="stat-value" id="fishLabeled">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card2">
+                    <h2 class="card-title">How to Identify Fish Effectively</h2>
+                    <h3 class="card-title2">Use the Coral City Camera Quick ID Guide to accurately identify fish!</h3>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div>
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div id="videoArea">
+                        <div id="catalogView" style="display: none;">
+                            <div class="catalog-container">
+                                <h2 style="color: #271126; margin-bottom: 16px;">Fish Catalog</h2>
+                                <p style="color: #806b78; margin-bottom: 20px;">All fish species recorded so far</p>
+                                
+                                <iframe 
+                                    id="catalogFrame"
+                                    src=""
+                                    class="catalog-iframe"
+                                    frameborder="0">
+                                </iframe>
+                                
+                                <button class="submit-btn" onclick="hideCatalog()" style="margin-top: 20px;">
+                                    ← Back to Labeling
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="videoPlayerArea">
+                            <div class="placeholder">
+                                <div class="placeholder-content">
+                                    <svg width="64" height="64" fill="none" stroke="#806b79" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    <h3>Select a Category</h3>
+                                    <p>Choose Fish or Fish Catalog from the sidebar to start</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Labeling Form -->
+                <div class="card" id="labelingForm" style="display: none; margin-top: 24px;">
+                    <h2 class="card-title">Label This Clip</h2>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+
+                    <div id="successAlert" class="alert alert-success" style="display: none;">
+                        <strong>✓ Saved!</strong> Loading next clip...
+                    </div>
+                    <!-- AI fish panel-->
+                    <div id="aiFishPanel" class="ai-panel" style="display: none;">
+                        <div class="ai-title">Mr.Fish AI Suggestions</div>
+                        <div id="aiStatus" class="ai-status">Waiting for clip...</div>
+                        <div id="aiPredictions" class="ai-predictions"></div>
+                        <div class="ai-actions">
+                          <button type="button" id="confirmPredictionBtn" class="btn-confirm"
+                            onclick="submitPredictionFeedback('confirmed')" disabled>
+                            Confirm Mr.Fish
+                          </button>
+                          <button type="button" id="denyPredictionBtn" class="btn-deny"
+                            onclick="submitPredictionFeedback('denied')" disabled>
+                            Deny Mr.Fish
+                          </button>
+                        </div>
+                        <div class="feedback-note">If denied, add the correct species (optional):</div>
+                        <input id="correctedSpecies" class="form-input" type="text" placeholder="Type the species here!">
+                      </div>
+                      
+
+                    <!-- Fish Form -->
+                    <form id="fishForm" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label">Number of Fish Visible</label>
+                            <select class="form-select" id="fishCount" required>
+                                <option value="">Select...</option>
+                                <option value="0">None visible</option>
+                                <option value="1">1</option>
+                                <option value="2-5">2-5</option>
+                                <option value="6-10">6-10</option>
+                                <option value="10+">10+</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Fish Behavior</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="behavior" value="feeding">
+                                    <span>Feeding</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="behavior" value="schooling">
+                                    <span>Schooling</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="behavior" value="swimming">
+                                    <span>Swimming normally</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="behavior" value="resting">
+                                    <span>Resting</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Submit Label</button>
+                        <button type="button" class="skip-btn" onclick="skipClip()">Skip This Clip</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MRFISH_CONFIG = {
+            apiKey: '9ah6fKZfLOVpufEW0qXU',
+            modelId: 'reefwatch-miami',
+            version: '8',
+            minConfidence: 0.35,
+            sampleIntervalMs: 10000,
+            maxPredictions: 3
+            };
+
+
+        const clipDatabase = {
+            fish: [
+                'fish1.mp4',
+                'fish2.mp4',
+                'fish3.mp4',
+                'fish4.mp4',
+                'fish5.mp4',
+                'fish6.mp4',
+                'fish7.mp4',
+                'fish8.mp4',
+                'fish9.mp4',
+                'fish10.mp4',
+                'fish11.mp4',
+                'fish12.mp4',
+                'fish13.mp4',
+                'fish14.mp4',
+                'fish15.mp4',
+                'fish16.mp4',
+                'fish17.mp4',
+                'fish18.mp4',
+                'fish19.mp4',
+                'fish20.mp4',
+                'fish21.mp4',
+            ]
+        };
+
+        let currentCategory = null;
+        let currentClipIndex = 0;
+        let labeledData = [];
+        let latestPredictions = [];
+        let inferenceTimer = null;
+        let inferenceInProgress = false;
+        let pendingAiFeedback = null;
+        let aiLocked = false;
+        const AUTO_LOCK_CONFIDENCE = 60;
+        let stats = {
+            totalLabeled: 0,
+            fishLabeled: 0
+        };
+
+        function init() {
+            renderCategories();
+            loadStats();
+            updateStatsDisplay();
+            
+            document.getElementById('fishForm').addEventListener('submit', handleFishSubmit);
+        }
+
+        function showCatalog() {
+            stopInferenceLoop();
+            currentCategory = 'catalog';
+            renderCategories();
+            
+            document.getElementById('videoPlayerArea').style.display = 'none';
+            document.getElementById('catalogView').style.display = 'block';
+            document.getElementById('labelingForm').style.display = 'none';
+            
+            const catalogUrl = 'https://docs.google.com/document/d/1e7hBGzVKFb6FFCwu78Jb5kE10IfBsR-blawzL_vBO6A/preview';
+            document.getElementById('catalogFrame').src = catalogUrl;
+        }
+
+        function hideCatalog() {
+            document.getElementById('videoPlayerArea').style.display = 'block';
+            document.getElementById('catalogView').style.display = 'none';
+            currentCategory = null;
+            renderCategories();
+        }
+
+        function renderCategories() {
+            const categoryList = document.getElementById('categoryList');
+            categoryList.innerHTML = `
+                <button class="category-button ${currentCategory === 'fish' ? 'active' : ''}" onclick="selectCategory('fish')">
+                    <div class="category-info">
+                        <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+                </svg>
+                        <div>
+                            <div class="category-name">Fish</div>
+                        </div>
+                    </div>
+                </button>
+                <button class="category-button ${currentCategory === 'catalog' ? 'active' : ''}" onclick="showCatalog()">
+                    <div class="category-info">
+                        <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                        </svg>
+                        <div>
+                            <div class="category-name">Fish Catalog</div>
+                        </div>
+                    </div>
+                </button>
+            `;
+        }
+
+        function selectCategory(category) {
+            stopInferenceLoop()
+            currentCategory = category;
+            currentClipIndex = 0;
+            renderCategories();
+            loadRandomClip();
+            showForm(category);
+        }
+
+        function loadRandomClip() {
+            const clips = clipDatabase[currentCategory];
+            if (!clips || clips.length === 0) {
+                alert('No clips available for this category. Please add video files.');
+                return;
+            }
+
+            currentClipIndex = Math.floor(Math.random() * clips.length);
+            const clipUrl = clips[currentClipIndex];
+
+            const videoArea = document.getElementById('videoPlayerArea');
+            videoArea.innerHTML = `
+                <div class="video-container">
+                    <video controls autoplay loop id="currentVideo">
+                        <source src="${clipUrl}" type="${getVideoMimeType(clipUrl)}">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-details">
+                    <div class="video-header">
+                        <div>
+                            <h2 class="video-title">${currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1)} Clip</h2>
+                            <p class="video-category">Category: ${currentCategory}</p>
+                        </div>
+                        <div class="status-badge">
+                            ⏺ Recording
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (currentCategory === 'fish') {
+                setupFishInference();
+            } else {
+                resetAiPanel();
+            }
+
+            updateProgress();
+        }
+
+        function getVideoMimeType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (ext === 'mov') return 'video/quicktime';
+            return 'video/mp4';
+        }
+
+        function showForm(category) {
+            document.getElementById('labelingForm').style.display = 'block';
+            document.getElementById('fishForm').style.display = category === 'fish' ? 'block' : 'none';
+            document.getElementById('successAlert').style.display = 'none';
+            document.getElementById('aiFishPanel').style.display = category === 'fish' ? 'block' : 'none';
+        }
+
+        function handleFishSubmit(e) {
+            e.preventDefault();
+            
+            const species = Array.from(document.querySelectorAll('input[name="species"]:checked'))
+                .map(cb => cb.value);
+            const count = document.getElementById('fishCount').value;
+            const behavior = Array.from(document.querySelectorAll('input[name="behavior"]:checked'))
+                .map(cb => cb.value);
+
+            const label = {
+                category: 'fish',
+                clipUrl: clipDatabase.fish[currentClipIndex],
+                clipIndex: currentClipIndex,
+                timestamp: new Date().toISOString(),
+                data: {
+                    species: species,
+                    count: count,
+                    behavior: behavior,
+                    aiFeedback: pendingAiFeedback
+                }
+            };
+
+            saveLabel(label);
+            stats.fishLabeled++;
+            showSuccessAndNext();
+        }
+
+        function saveLabel(label) {
+            labeledData.push(label);
+            localStorage.setItem('labeledData', JSON.stringify(labeledData));
+            
+            stats.totalLabeled++;
+            localStorage.setItem('stats', JSON.stringify(stats));
+            updateStatsDisplay();
+
+            console.log('Label saved:', label);
+
+            sendToGoogleSheets(label);
+        }
+
+        function sendToGoogleSheets(label) {
+            const ai = label.category === 'fish' ? label.data.aiFeedback : null;
+            const SHEET_ID = '16KdOtnnn1xNQRKUDHcdCqlwzAKj-S2JxTz5ek8LaDwk';
+            const SHEET_NAME = 'Sheet1';
+            
+            const row = {
+                timestamp: label.timestamp,
+                recordType: 'manual_label',
+                category: label.category,
+                videoFile: label.clipUrl || '',
+                species: label.category === 'fish' ? (label.data.species || []).join(', ') : '',
+                fishCount: label.category === 'fish' ? (label.data.count || '') : '',
+                behavior: label.category === 'fish' ? (label.data.behavior || []).join(', ') : '',
+                coralHealth: '',
+                coralCoverage: '',
+                issues: '',
+                waterClarity: '',
+                aiTopPrediction: ai && ai.prediction ? ai.prediction.class : '',
+                aiTopConfidence: ai && ai.prediction ? ai.prediction.confidence : '',
+                aiAllPredictions: ai ? JSON.stringify(ai.allPredictions || []) : '',
+                viewerVerdict: ai ? (ai.viewerVerdict || '') : '',
+                correctedSpecies: ai ? (ai.correctedSpecies || '') : ''
+            };
+
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOAcDuBbLG29wvHILpDU9pmkqNMDgCMNz__5pHjcCI0XsDRGj05M4jb4NATjXfdNlX/exec';
+
+            console.log('Data ready to send to Google Sheets:', row);
+            
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(row)
+            })
+            .then(() => console.log('✓ Sent to Google Sheets'))
+            .catch(error => console.error('Error sending to Google Sheets:', error));
+        }
+
+        function resetAiPanel() {
+            pendingAiFeedback = null;
+            latestPredictions = [];
+            const aiStatus = document.getElementById('aiStatus');
+            const aiPredictions = document.getElementById('aiPredictions');
+            const confirmBtn = document.getElementById('confirmPredictionBtn');
+            const denyBtn = document.getElementById('denyPredictionBtn');
+            const correctedSpecies = document.getElementById('correctedSpecies');
+
+            if (aiStatus) aiStatus.textContent = 'Waiting for clip...';
+            if (aiPredictions) aiPredictions.innerHTML = '';
+            if (confirmBtn) confirmBtn.disabled = true;
+            if (denyBtn) denyBtn.disabled = true;
+            if (correctedSpecies) correctedSpecies.value = '';
+        }
+
+        function stopInferenceLoop() {
+            if (inferenceTimer) {
+                clearInterval(inferenceTimer);
+                inferenceTimer = null;
+            }
+            inferenceInProgress = false;
+        }
+        
+        function hasMrFishConfig() {
+            return MRFISH_CONFIG.apiKey && MRFISH_CONFIG.modelId && MRFISH_CONFIG.version;
+        }
+
+        function setupFishInference() {
+            resetAiPanel();
+            aiLocked = false;
+            stopInferenceLoop();
+
+            const aiStatus = document.getElementById('aiStatus');
+            if (!hasMrFishConfig()) {
+                aiStatus.textContent = 'There is an error with the API config.';
+                return;
+            }
+
+            const video = document.getElementById('currentVideo');
+            if (!video) {
+                aiStatus.textContent = 'Video not ready yet.';
+                return;
+            }
+
+            aiStatus.textContent = 'AI ready. Running fish detection...';
+            const run = () => runMrFishInference(video);
+            video.addEventListener('loadeddata', run, { once: true });
+            run();
+            inferenceTimer = setInterval(run, MRFISH_CONFIG.sampleIntervalMs);
+        }
+
+        async function runMrFishInference(video) {
+            if (aiLocked) return;
+            if (inferenceInProgress || currentCategory !== 'fish') return;
+            if (!video || video.readyState < 2 || video.videoWidth === 0 || video.videoHeight === 0) return;
+
+            inferenceInProgress = true;
+            const aiStatus = document.getElementById('aiStatus');
+            aiStatus.textContent = 'Analyzing current frame...';
+
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const imageBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+                if (!imageBlob) throw new Error('Could not capture video frame.');
+
+                const formData = new FormData();
+                formData.append('file', imageBlob, 'frame.jpg');
+
+                const confidencePercent = Math.round(MRFISH_CONFIG.minConfidence * 100);
+                const endpoint = `https://detect.roboflow.com/${MRFISH_CONFIG.modelId}/${MRFISH_CONFIG.version}?api_key=${MRFISH_CONFIG.apiKey}&confidence=${confidencePercent}`;
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Mr.Fish request failed (${response.status})`);
+                }
+
+                const result = await response.json();
+                const predictions = (result.predictions || [])
+                    .sort((a, b) => b.confidence - a.confidence)
+                    .slice(0, MRFISH_CONFIG.maxPredictions)
+                    .map((item) => ({
+                        class: item.class,
+                        confidence: Number((item.confidence * 100).toFixed(1))
+                    }));
+
+                updateAiPredictionUI(predictions);
+
+                if (predictions.length && predictions[0].confidence >= AUTO_LOCK_CONFIDENCE) {
+                    aiLocked = true;
+                    stopInferenceLoop();
+                    document.getElementById('aiStatus').textContent =
+                        `Locked: ${predictions[0].class} (${predictions[0].confidence}%). Confirm or deny.`;
+                }
+
+            } catch (error) {
+                console.error('Mr.Fish inference error:', error);
+                aiStatus.textContent = 'AI request failed. Check Mr.Fish config/API key.';
+                latestPredictions = [];
+                updateAiButtons();
+            } finally {
+                inferenceInProgress = false;
+            }
+        }
+
+        function updateAiPredictionUI(predictions) {
+            latestPredictions = predictions;
+            const aiStatus = document.getElementById('aiStatus');
+            const aiPredictions = document.getElementById('aiPredictions');
+
+            if (!predictions.length) {
+                aiStatus.textContent = 'No fish detected in this frame. Retrying...';
+                aiPredictions.innerHTML = '';
+                updateAiButtons();
+                return;
+            }
+
+            aiStatus.textContent = 'AI detected fish. Please confirm or deny.';
+            aiPredictions.innerHTML = predictions
+                .map((prediction) => `<span class="prediction-chip">${prediction.class} (${prediction.confidence}%)</span>`)
+                .join('');
+            updateAiButtons();
+        }
+
+        function updateAiButtons() {
+            const hasPredictions = latestPredictions.length > 0;
+            document.getElementById('confirmPredictionBtn').disabled = !hasPredictions;
+            document.getElementById('denyPredictionBtn').disabled = !hasPredictions;
+        }
+
+        function submitPredictionFeedback(viewerVerdict) {
+            if (!latestPredictions.length || currentCategory !== 'fish') return;
+
+            const correctedSpecies = document.getElementById('correctedSpecies').value.trim();
+
+            pendingAiFeedback = {
+                prediction: latestPredictions[0],
+                allPredictions: latestPredictions,
+                viewerVerdict,
+                correctedSpecies
+            };
+
+            const aiStatus = document.getElementById('aiStatus');
+            aiStatus.textContent = viewerVerdict === 'confirmed'
+                ? 'AI marked as confirmed. Submit the fish form to save everything together.'
+                : 'AI marked as denied. Submit the fish form to save everything together.';
+        }
+
+        function loadStats() {
+            const savedStats = localStorage.getItem('stats');
+            const savedData = localStorage.getItem('labeledData');
+            
+            if (savedStats) {
+                stats = JSON.parse(savedStats);
+            }
+            if (savedData) {
+                labeledData = JSON.parse(savedData);
+            }
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('totalLabeled').textContent = stats.totalLabeled;
+            document.getElementById('fishLabeled').textContent = stats.fishLabeled;
+        }
+
+        function updateProgress() {
+            const clips = clipDatabase[currentCategory];
+            const progress = ((currentClipIndex + 1) / clips.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showSuccessAndNext() {
+            document.getElementById('successAlert').style.display = 'block';
+            document.getElementById('fishForm').reset();
+
+            setTimeout(() => {
+                document.getElementById('successAlert').style.display = 'none';
+                loadRandomClip();
+            }, 1500);
+        }
+
+        function skipClip() {
+            resetAiPanel();
+            loadRandomClip();
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(labeledData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'reefwatch-labels-' + new Date().toISOString() + '.json';
+            link.click();
+        }
+
+        window.exportData = exportData;
+
+        init();
+    </script>
+</body>
+</html>
